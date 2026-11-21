@@ -15,7 +15,7 @@ Runs on open/sample data only. No real personal data is in this repository.
 
 ## AI tools, models and libraries
 
-- Model: Google Gemini (free tier) - planning, drafting, checking.
+- Model: openai/gpt-oss-120b via Groq (free tier) - planning, drafting, checking.
 - Web data: Olostep API (Homingo partner credits).
 - Agent tools: Model Context Protocol (MCP) server exposing mailbox/calendar/web/approval tools.
 - Language: Python 3.
@@ -25,10 +25,11 @@ Runs on open/sample data only. No real personal data is in this repository.
 1. `python -m venv .venv && source .venv/bin/activate`
 2. `pip install -r requirements.txt`
 3. Copy `.env.example` to `.env` and fill in your own keys (never commit `.env`).
-4. `python src/main.py`
+4. `python src/agent.py "My ShopKart order never arrived. Get my money back"`
+5. MCP server for any MCP client: `python src/mcp_server.py` (stdio)
 
 ## Repo layout
 
-- `src/` - agent loop, planner, checker, approval queue, MCP server.
+- `src/` - agent loop (`agent.py`), tools (`tools_impl.py`), MCP server (`mcp_server.py`, read/draft tools only - acting requires the approval queue in the agent).
 - `data/` - synthetic sample mailbox/calendar fixtures.
 - `tests/` - example inputs rerun after every significant change.

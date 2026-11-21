@@ -1,0 +1,6 @@
+{
+  "shopkart_refund": {
+    "source": "shopkart.example/refund-policy (fixture - swap for live Olostep fetch)",
+    "text": "ShopKart refund policy: undelivered orders are refunded in full if claimed within 14 days of the last promised delivery date. Claims go to refunds@shopkart.example with the order id. Refund reaches the original payment method in 5-7 business days."
+  }
+}

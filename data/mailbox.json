@@ -1,0 +1,11 @@
+{
+  "account": "alex.demo@example.com",
+  "note": "Synthetic sample mailbox for the demo user 'Alex'. No real personal data.",
+  "messages": [
+    {"id": "m001", "from": "orders@shopkart.example", "date": "2026-11-02", "subject": "Order SK-88123 confirmed", "body": "Thanks for your order SK-88123 (Wireless Mouse, Rs 1,499). Estimated delivery: 6 Nov 2026. Track: shopkart.example/track/SK-88123"},
+    {"id": "m002", "from": "support@shopkart.example", "date": "2026-11-10", "subject": "Re: Order SK-88123 delayed", "body": "We're sorry your order is delayed. New estimate: 20 Nov 2026. If it doesn't arrive by then, write to refunds@shopkart.example within 14 days for a full refund."},
+    {"id": "m003", "from": "newsletter@dailybrew.example", "date": "2026-11-12", "subject": "Your weekly reads", "body": "Five stories we liked this week..."},
+    {"id": "m004", "from": "calendar@dentist.example", "date": "2026-11-05", "subject": "Appointment reminder", "body": "Dental cleaning, 24 Nov 2026, 4:30 PM, BrightSmile Clinic, MG Road."},
+    {"id": "m005", "from": "bank-alerts@demobank.example", "date": "2026-11-11", "subject": "Statement ready", "body": "Your October statement is ready in netbanking."}
+  ]
+}

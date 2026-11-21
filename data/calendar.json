@@ -1,0 +1,7 @@
+{
+  "note": "Synthetic sample calendar for demo user 'Alex'.",
+  "events": [
+    {"id": "e001", "title": "Dental cleaning", "when": "2026-11-24T16:30:00+05:30", "where": "BrightSmile Clinic, MG Road"},
+    {"id": "e002", "title": "Team standup", "when": "2026-11-23T09:30:00+05:30", "where": "Online"}
+  ]
+}

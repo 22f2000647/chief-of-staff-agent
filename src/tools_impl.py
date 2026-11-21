@@ -58,9 +58,15 @@ def web_lookup(url_or_query: str):
     req = urllib.request.Request(
         "https://api.olostep.com/v1/scrapes",
         data=json.dumps({"url_to_scrape": url_or_query}).encode(),
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                 "User-Agent": "chief-of-staff-agent/0.1"})
+    with urllib.request.urlopen(req, timeout=45) as r:
+        data = json.load(r)
+    res = data.get("result") or {}
+    return {"source": url_or_query,
+            "markdown": (res.get("markdown_content") or "")[:4000],
+            "status": (res.get("page_metadata") or {}).get("status_code"),
+            "credits_used": data.get("credits_consumed")}
 
 def draft_create(to: str, subject: str, body: str):
     """Create (not send) a draft message. Returns a draft id for the approval queue."""

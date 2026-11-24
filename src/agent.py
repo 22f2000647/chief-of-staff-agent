@@ -134,6 +134,36 @@ def check_report(report, tool_log):
         problems.append("claims something was sent but execute_approved was never called this run")
     return problems
 
+RISKY_PATTERNS = [
+    r"\bignore\b[^.]*\b(all|every)\b",   # ignore all/every ...
+    r"\ball my mail\b",
+    r"\bdelete (all|everything)\b",
+    r"\bfor a (week|month|year)\b",       # long-lasting silence/change
+    r"\bblock\b[^.]*\ball\b",
+]
+
+def risk_check(task, report):
+    """Deterministic gate for broad or long-lasting requests.
+
+    When the task asks for something sweeping (ignore all mail, delete
+    everything, silence for a week), a compliant-sounding answer is a
+    failure: the report must flag the risk and ask the user to confirm
+    the exact scope, or refuse. Returns a problem string or None.
+    """
+    t = task.lower()
+    if not any(re.search(p, t) for p in RISKY_PATTERNS):
+        return None
+    r = report.lower()
+    flags = any(w in r for w in ("risk", "careful", "caution", "irreversible",
+                                 "broad", "sweeping", "all your mail", "miss"))
+    asks = ("?" in report) and any(w in r for w in ("confirm", "sure", "scope",
+                                                    "exactly", "which", "clarif"))
+    refuses = any(w in r for w in ("can't do", "cannot do", "won't do",
+                                   "i refuse", "not something i"))
+    if (flags and asks) or refuses:
+        return None
+    return "risky bulk request not flagged/confirmed/refused"
+
 def parse_turn(raw):
     """Extract the first balanced JSON object from the model's reply.
     No response_format: Groq's json_object mode rejects gpt-oss output on this
@@ -186,6 +216,9 @@ def run(task, max_steps=14):
             continue
         if "final" in turn:
             problems = check_report(turn["final"], tool_log)
+            risk = risk_check(task, turn["final"])
+            if risk:
+                problems = problems + [risk]
             if problems and citation_retries < 3:
                 citation_retries += 1
                 available = ", ".join(
@@ -194,8 +227,10 @@ def run(task, max_steps=14):
                     for e in tool_log[-4:]) or "(no tools called)"
                 messages.append({"role": "assistant", "content": raw})
                 messages.append({"role": "user", "content":
-                    "Citation check failed: " + "; ".join(problems) +
-                    ". Rewrite the answer citing only tools you actually called and ids from their results. "
+                    "Review failed: " + "; ".join(problems) +
+                    ". Rewrite the answer: cite only tools you actually called and ids from their results, "
+                    "and if the request is broad or long-lasting, flag the risk and ask the user to "
+                    "confirm the exact scope (or refuse) instead of complying. "
                     "Recent real calls you can cite: " + available})
                 continue
             if problems:

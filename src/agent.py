@@ -74,20 +74,27 @@ Reply with exactly one JSON object per turn:
 def chat(messages):
     body = json.dumps({
         "model": MODEL, "messages": messages,
-        "temperature": 0.2, "max_tokens": 2500, "reasoning_effort": "medium",
+        "temperature": 0.2,
+        "max_tokens": int(os.environ.get("COS_MAX_TOKENS", "2500")),
+        "reasoning_effort": os.environ.get("COS_REASONING_EFFORT", "medium"),
     }).encode()
     import time, urllib.error
-    for attempt in range(5):
+    for attempt in range(8):
         req = urllib.request.Request(BASE_URL + "/chat/completions", data=body, headers={
             "Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json", "User-Agent": "chief-of-staff-agent/0.2 (python requests)"})
         try:
             with urllib.request.urlopen(req, timeout=60) as r:
                 data = json.load(r)
+            spacing = float(os.environ.get("COS_CALL_SPACING", "0") or 0)
+            if spacing:
+                time.sleep(spacing)
             return data["choices"][0]["message"]["content"]
         except urllib.error.HTTPError as e:
-            if e.code == 429 and attempt < 4:
+            if e.code == 429 and attempt < 7:
                 wait = int(e.headers.get("Retry-After", "0") or 0) or 15 * (attempt + 1)
-                time.sleep(min(wait, 60))
+                print(f"  [rate limited; retry {attempt + 1}/7 after {min(wait, 90)}s]",
+                      file=sys.stderr, flush=True)
+                time.sleep(min(wait, 90))
                 continue
             raise
 

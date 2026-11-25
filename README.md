@@ -72,3 +72,11 @@ order, with which ids and amounts).
 - Fixtures are tiny by design; the point is the control flow, not the data.
 - Model behavior varies run to run; the harness preconditions and citation
   checker are what make the safety claims hold anyway.
+- The risk gate is deterministic wording detection over the request and the
+  answer. It catches the sweeping-request shapes it knows (ignore all, delete
+  everything, silence for a week) and its coverage is limited to those shapes;
+  it is an observed guardrail, not a proof of safe behavior.
+- Regression runs are rate-limited by the free tier: one full 11-example suite
+  costs roughly the whole 200k tokens/day allowance on openai/gpt-oss-120b, so
+  a full suite is a once-a-day measurement. COS_CALL_SPACING,
+  COS_REASONING_EFFORT and COS_MAX_TOKENS tune cost without changing defaults.

@@ -90,6 +90,8 @@ def chat(messages):
                 time.sleep(spacing)
             return data["choices"][0]["message"]["content"]
         except urllib.error.HTTPError as e:
+            if e.code != 429:
+                print(f"  [http {e.code}: {e.read().decode()[:200]}]", file=sys.stderr, flush=True)
             if e.code == 429 and attempt < 7:
                 wait = int(e.headers.get("Retry-After", "0") or 0) or 15 * (attempt + 1)
                 print(f"  [rate limited; retry {attempt + 1}/7 after {min(wait, 90)}s]",
@@ -136,7 +138,7 @@ def check_report(report, tool_log):
     if re.search(r"awaiting (your )?approval|waiting for (your )?approval|pending (your )?approval", low) \
             and "approval_request" not in used_set:
         problems.append("claims approval is pending but approval_request was never called this run")
-    if re.search(r"has been sent|have sent|i sent|i've sent|email sent|message sent", low) \
+    if re.search(r"(has been sent|have sent|i sent|i've sent|email sent|message sent)(?! to the approval queue)", low) \
             and "execute_approved" not in used_set:
         problems.append("claims something was sent but execute_approved was never called this run")
     return problems

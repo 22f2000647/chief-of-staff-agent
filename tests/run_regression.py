@@ -122,7 +122,7 @@ def main():
             else:
                 passed_exp += 1
                 print(f"  ok: {exp}")
-        time.sleep(2)  # be polite to the free tier
+        time.sleep(30)  # stay under the 8k tokens/min free-tier budget
     print(f"\n=== {passed_exp}/{total_exp} expectations passed ===")
     if failures:
         for inp, fs in failures:

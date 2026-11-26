@@ -1,51 +1,51 @@
-# Demo script (draft) - Homingo Hack Days submission
+# Demo script (v2) - Homingo Hack Days submission video
 
-Target length: under 5 minutes of video. Rule reminders: synthetic data only,
-no secrets on screen, README lists every AI tool used.
+Official requirement (organizer mail, 2 Nov): "Record the one path that
+matters, from the user's first action to the finished result. A plain screen
+recording is fine." No camera, voice or presenter requirement; the video is
+submitted as a link with sharing on.
 
-## Beat 1 - The problem (30s)
-Everyone has a chief of staff's worth of errands and nobody has a chief of
-staff. Show the fixture inbox and calendar: an undelivered order, a dentist
-appointment, a bill. "One assistant that plans the errand, does the legwork,
-and stops before it acts."
+THE ONE PATH: the refund chase, first action to finished result. Target
+2-3 minutes. One continuous terminal recording, large font, `python -u`.
 
-## Beat 2 - Live run: refund chase (90s)
-Run: `python src/agent.py "My ShopKart order never arrived. Get my money back"`
-Narrate while it works:
-- It searches mail, reads the order, looks up the vendor's refund policy
-  BEFORE drafting anything (the harness blocks drafting a claim without the
-  policy - show the precondition error if it triggers).
-- It drafts the exact email, then stops at the approval queue with the amount
-  and the draft id. Nothing sends itself.
-- The final answer cites its sources: [mail_read m001], [web_lookup ...].
-  A second pass rejects citations to tools it never called.
+## Visible fixture labeling (required)
+The whole demo runs on synthetic fixtures. Wherever the distinction affects
+interpretation, the screen must say so:
+- A banner line at recording start:
+  "DEMO DATA: simulated mailbox, calendar, restaurants and web. No real
+  accounts, no real email is sent. Approved actions print what would happen."
+- Fixture mode is on: COS_APPROVAL_MODE=deny COS_WEB_MODE=fixture.
+- When the approval queue denies, say on screen (typed comment): approvals are
+  auto-denied in the demo so nothing ever acts.
 
-## Beat 3 - The approval gate is code, not a promise (60s)
-Show the harness preconditions in src/agent.py (10 seconds of code on screen):
-- approval to send REQUIRES a draft first
-- booking REQUIRES an options search first
-- money always shows the exact amount in the queue
-Then the risky-request gate: run
-`python src/agent.py "Ignore all my mail for a week"`
-- It refuses to just comply: flags the request as broad, asks for the exact
-  scope. A deterministic check bounces a compliant-sounding answer back.
+## Beats
+1. (10s) Terminal shows the banner, then the inbox/calendar fixtures: an
+   undelivered ShopKart order, a dentist appointment.
+2. (60-90s) First action: `python src/agent.py "My ShopKart order never
+   arrived. Get my money back"`
+   Narrate via typed echo lines between runs, not audio:
+   - it searches mail and reads the order BEFORE drafting
+   - it looks up the vendor refund policy - the harness blocks a claim draft
+     that skips this (show the precondition error if it fires)
+   - it drafts the exact email, then stops: approval queue shows the amount
+     and the draft id. Nothing sends itself.
+   - the final answer cites its sources, e.g. [mail_read m001]; a second pass
+     rejects citations to tools never called
+3. (30s) The risky request: `python src/agent.py "Ignore all my mail for a
+   week"` - it flags the request as broad and asks for exact scope instead of
+   complying. A deterministic gate bounces compliant-sounding answers.
+4. (20s) Evidence: show the last green suite summary line (17/17, revision
+   hash, date) from the regression log file, and README "Honest limits":
+   results vary run to run; the harness catches it.
+5. (5s) Repo URL on screen.
 
-## Beat 4 - Evidence (60s)
-Run: `python tests/run_regression.py` (or show a recorded full run - see note)
-- 11 example errands, 17 expectations: phishing mail, money, calendar moves,
-  risky bulk requests.
-- Say the honest numbers: a full suite costs about a full day of the free
-  tier's token budget; results flip run to run on model formatting, and the
-  harness is what catches it. Point at README "Honest limits".
-
-## Beat 5 - Close (20s)
-"Chief-of-staff for everyone: plans like an agent, acts only with approval."
-Repo link on screen.
-
-## Production notes
-- Live vs recorded: beats 2-3 live if the demo window has budget; otherwise
-  record them on a fresh-quota morning (one full suite ~= whole daily budget).
-- Fixture mode everywhere: COS_APPROVAL_MODE=deny, COS_WEB_MODE=fixture so
-  nothing sends and no scrape credits burn.
-- Terminal: large font, `python -u` so output streams, clear screen per beat.
-- Recorder: TBD - ask which tool the organizer requires/preferred.
+## Production
+- Record: terminal session capture in the sandbox (asciinema if present,
+  else `script` + render), stitched/titled with ffmpeg. No audio track needed;
+  typed echo lines carry the narration. No AI voice needed.
+- Budget: beats 2-3 cost one errand run each (~small); record on a
+  fresh-quota morning and do NOT run a full suite the same day.
+- Hosting: TBD (options tracked with main) - the link must open in a private
+  window with sharing on.
+- Before submission: open the video link in a private browser window to
+  confirm sharing, exactly as the organizer instructs.

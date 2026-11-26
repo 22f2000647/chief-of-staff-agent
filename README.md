@@ -2,6 +2,10 @@
 
 One sentence: A chief-of-staff agent that takes one everyday errand in plain words - starting with chasing a refund - plans the steps, does the work over your (sample) mail, calendar and the web, asks your approval before anything external happens, and reports back with proof.
 
+For anyone who would hand errands to an assistant if they could trust it not
+to act on its own: the assistant does the legwork, the human keeps the
+send/book/pay button.
+
 Built for Homingo Hack Days, Edition 01 - Agents track ("A personal staff for everyone").
 
 ## Why this is different
@@ -30,7 +34,7 @@ Most demo agents will happily say they sent the email. This one cannot:
 ## Run it
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt   # needs Python 3.10+
 cp .env.example .env   # add GROQ_API_KEY (free at console.groq.com); OLOSTEP_API_KEY optional
 python src/agent.py "My ShopKart order never arrived. Get my money back"
 ```
@@ -41,7 +45,7 @@ read/draft tools; acting stays behind the agent's approval queue.
 ## Test
 
 ```bash
-python tests/run_regression.py        # all 10 example errands
+python tests/run_regression.py        # all 11 example errands, 17 expectations
 python tests/run_regression.py 1 4    # a subset
 ```
 
@@ -54,8 +58,9 @@ order, with which ids and amounts).
 
 - Model: Groq `openai/gpt-oss-120b` via the OpenAI-compatible chat API
 - Web lookups: Olostep scrape API (fixture mode when no key / in tests)
-- MCP: FastMCP
-- No frameworks beyond that on purpose: the agent loop is ~150 readable lines.
+- MCP: FastMCP (the `mcp` package, the only dependency)
+- No frameworks beyond that on purpose: the agent loop is under 300 readable lines.
+- Development: built with AI coding assistance, as the hackathon rules allow.
 
 ## Layout
 
@@ -65,6 +70,16 @@ order, with which ids and amounts).
 - `data/` - synthetic fixtures (no real personal data)
 - `tests/examples.json` + `tests/run_regression.py` - the regression set
 - `audit.log` - append-only tool audit trail (gitignored, created at runtime)
+
+## What's next
+
+- Real inboxes and calendars (Gmail / Google Calendar APIs) behind the same
+  approval gate, with the fixtures kept for tests.
+- A small approval UI instead of a console queue, so the human reviews drafts
+  and amounts on a phone.
+- A richer policy corpus for web_lookup and multi-errand planning across a day.
+- Cost-aware model routing, informed by the free-tier budget lessons in
+  "Honest limits".
 
 ## Honest limits
 

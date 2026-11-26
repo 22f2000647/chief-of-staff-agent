@@ -54,13 +54,15 @@ auto-denied and web lookups forced to fixtures, then checks each expectation in
 `tests/examples.json` (heuristic behavioral checks: which tools ran, in what
 order, with which ids and amounts).
 
-## Stack
+## Stack: AI tools, models and libraries used
 
 - Model: Groq `openai/gpt-oss-120b` via the OpenAI-compatible chat API
 - Web lookups: Olostep scrape API (fixture mode when no key / in tests)
 - MCP: FastMCP (the `mcp` package, the only dependency)
 - No frameworks beyond that on purpose: the agent loop is under 300 readable lines.
-- Development: built with AI coding assistance, as the hackathon rules allow.
+- Development: the code was written by an AI coding assistant working to the
+  entrant's direction, and reviewed and tested by the entrant before each
+  commit. AI tools are allowed throughout by the hackathon rules.
 
 ## Layout
 

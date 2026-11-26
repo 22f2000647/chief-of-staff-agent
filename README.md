@@ -60,9 +60,8 @@ order, with which ids and amounts).
 - Web lookups: Olostep scrape API (fixture mode when no key / in tests)
 - MCP: FastMCP (the `mcp` package, the only dependency)
 - No frameworks beyond that on purpose: the agent loop is under 300 readable lines.
-- Development: the code was written by an AI coding assistant working to the
-  entrant's direction, and reviewed and tested by the entrant before each
-  commit. AI tools are allowed throughout by the hackathon rules.
+- Development: built with AI coding assistance. AI tools are allowed
+  throughout by the hackathon rules.
 
 ## Layout
 

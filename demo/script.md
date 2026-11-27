@@ -45,7 +45,9 @@ interpretation, the screen must say so:
   typed echo lines carry the narration. No AI voice needed.
 - Budget: beats 2-3 cost one errand run each (~small); record on a
   fresh-quota morning and do NOT run a full suite the same day.
-- Hosting: TBD (options tracked with main) - the link must open in a private
-  window with sharing on.
-- Before submission: open the video link in a private browser window to
-  confirm sharing, exactly as the organizer instructs.
+- Hosting: GitHub release asset on this repo.
+  FINAL LINK: https://github.com/22f2000647/chief-of-staff-agent/releases/download/demo-v1/demo.mp4
+  Verified 27 Nov 2026: anonymous (no-cookie) download HTTP 200, 2,037,079
+  bytes, sha256 3320de04e1eb3de71eb39ea5f3ed899789c0144dff5f4248be6797d34b16f569
+  matches the release page and the recorded file; ffprobe reads 244.5s.
+  Note: release-asset links download the file rather than playing inline.

@@ -8,6 +8,8 @@ send/book/pay button.
 
 Built for Homingo Hack Days, Edition 01 - Agents track ("A personal staff for everyone").
 
+Demo video (4 min, simulated data): [demo.mp4](https://github.com/22f2000647/chief-of-staff-agent/releases/download/demo-v1/demo.mp4) - script in `demo/script.md`.
+
 ## Why this is different
 
 Most demo agents will happily say they sent the email. This one cannot:
